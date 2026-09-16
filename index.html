@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub · Pitch Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d1117;
+            background-image: radial-gradient(circle at 20% 30%, rgba(20, 180, 160, 0.06) 0%, transparent 30%),
+                              radial-gradient(circle at 90% 70%, rgba(20, 180, 160, 0.08) 0%, transparent 40%);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            color: #e6edf3;
+        }
+
+        /* presentation container */
+        .presentation {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* each slide – full viewport, centered, hidden by default */
+        .slide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.96);
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+            max-width: 1100px;
+            width: 92%;
+            max-height: 92vh;
+            overflow-y: auto;
+            background: rgba(22, 27, 34, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            border-radius: 2rem;
+            padding: 2.5rem 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(45, 212, 191, 0.1) inset;
+            scrollbar-width: thin;
+            scrollbar-color: #2dd4bf40 #0d1117;
+        }
+
+        /* custom scrollbar for slides if content overflows */
+        .slide::-webkit-scrollbar {
+            width: 6px;
+        }
+        .slide::-webkit-scrollbar-track {
+            background: #0d1117;
+            border-radius: 10px;
+        }
+        .slide::-webkit-scrollbar-thumb {
+            background: #2dd4bf40;
+            border-radius: 10px;
+        }
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: #2dd4bf80;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #2dd4bf, #a78bfa, #2dd4bf, transparent);
+            opacity: 0.4;
+            border-radius: 2rem 2rem 0 0;
+        }
+
+        /* slide number badge */
+        .slide-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #8b949e;
+            letter-spacing: 1px;
+            background: rgba(45, 212, 191, 0.1);
+            padding: 0.25rem 0.9rem;
+            border-radius: 40px;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-size: 3.2rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: #f0f6fc;
+            margin-bottom: 0.75rem;
+        }
+
+        h1 .accent {
+            color: #2dd4bf;
+            font-weight: 500;
+            text-shadow: 0 0 30px rgba(45, 212, 191, 0.3);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            font-size: 2rem;
+            letter-spacing: -0.01em;
+            color: #f0f6fc;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: #2dd4bf;
+            margin-bottom: 0.5rem;
+        }
+
+        .subhead {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: #b1bac4;
+            letter-spacing: 0.01em;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            max-width: 85%;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #b1bac4;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.3px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.8rem;
+            margin: 1.5rem 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(45, 212, 191, 0.15);
+            border-radius: 1.25rem;
+            padding: 1.5rem 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(45, 212, 191, 0.4);
+            background: rgba(45, 212, 191, 0.03);
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #2dd4bf;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #b1bac4;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        .stat-desc {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-top: 0.6rem;
+            line-height: 1.5;
+        }
+
+        .chip {
+            display: inline-block;
+            background: rgba(45, 212, 191, 0.12);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            padding: 0.25rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            color: #2dd4bf;
+            text-transform: uppercase;
+            margin-right: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .chip.purple {
+            border-color: rgba(167, 139, 250, 0.4);
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.08);
+        }
+
+        .chip.gold {
+            border-color: rgba(251, 191, 36, 0.4);
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.06);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            font-size: 0.95rem;
+            color: #c9d1d9;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            line-height: 1.45;
+        }
+
+        li::before {
+            content: "▹";
+            color: #2dd4bf;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.08) 0%, rgba(167, 139, 250, 0.05) 100%);
+            border-left: 3px solid #2dd4bf;
+            padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .highlight-box p {
+            font-size: 1rem;
+            color: #e6edf3;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .highlight-box strong {
+            color: #2dd4bf;
+            font-weight: 600;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 1rem;
+            border: 1px solid rgba(45, 212, 191, 0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            background: rgba(22, 27, 34, 0.6);
+        }
+
+        th {
+            background: rgba(45, 212, 191, 0.08);
+            color: #2dd4bf;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.8rem 1.2rem;
+            letter-spacing: 0.03em;
+            border-bottom: 1px solid rgba(45, 212, 191, 0.2);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 0.7rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #c9d1d9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check {
+            color: #2dd4bf;
+            font-weight: 700;
+        }
+
+        .cross {
+            color: #f87171;
+            font-weight: 400;
+        }
+
+        .mixed {
+            color: #fbbf24;
+        }
+
+        .footer-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(45, 212, 191, 0.15);
+            font-size: 0.8rem;
+            color: #8b949e;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-line a {
+            color: #2dd4bf;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .footer-line a:hover {
+            opacity: 0.8;
+        }
+
+        .team-names {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #b1bac4;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.3), transparent);
+            margin: 1.5rem 0;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(13, 17, 23, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            font-size: 0.75rem;
+            color: #8b949e;
+            letter-spacing: 0.5px;
+            z-index: 100;
+            transition: opacity 0.3s;
+        }
+
+        .keyboard-hint kbd {
+            background: rgba(45, 212, 191, 0.15);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 6px;
+            padding: 0.15rem 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            color: #2dd4bf;
+            font-weight: 500;
+        }
+
+        .keyboard-hint .dot {
+            color: #2dd4bf;
+            margin: 0 0.15rem;
+        }
+
+        .keyboard-hint.fade {
+            opacity: 0.3;
+        }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            .slide {
+                padding: 1.8rem 1.5rem;
+                width: 95%;
+                max-height: 94vh;
+            }
+            h1 {
+                font-size: 2.4rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+            }
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            .subhead {
+                max-width: 100%;
+                font-size: 1rem;
+            }
+            .slide-number {
+                top: 1rem;
+                right: 1.2rem;
+                font-size: 0.7rem;
+            }
+            .stat-number {
+                font-size: 1.8rem;
+            }
+            .keyboard-hint {
+                font-size: 0.65rem;
+                padding: 0.4rem 0.9rem;
+                bottom: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slide {
+                padding: 1.4rem 1rem;
+                border-radius: 1.25rem;
+                width: 96%;
+            }
+            h1 {
+                font-size: 1.9rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .footer-line {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            .team-names {
+                font-size: 0.8rem;
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ===== PAGE 1 ===== -->
+        <div class="slide active" data-index="0">
+            <div class="slide-number">01 / 10</div>
+            <div class="badge-row">
+                <span class="chip">5-minute pitch</span>
+                <span class="chip purple">EduStdHub Group · Nex Group</span>
+            </div>
+            <h1>Study<span class="accent">Hub</span></h1>
+            <p class="tagline">One workspace. Deep focus. Honest AI.</p>
+            <p class="subhead" style="margin-top:0.75rem;">The study OS for students who currently juggle eight to ten apps a day — built for cheap phones, weak networks, and real classrooms.</p>
+            <div style="margin: 1.5rem 0 0.75rem;">
+                <p style="font-size:0.8rem; text-transform:uppercase; letter-spacing:2px; color:#8b949e; margin-bottom:0.5rem;">Presented by</p>
+                <div class="team-names">
+                    <span>Abrar Rahman Nafiu</span>
+                    <span>·</span>
+                    <span>Sayed Anindya Mahfuj</span>
+                    <span>·</span>
+                    <span>Imtanan Jaysan Arhab</span>
+                </div>
+            </div>
+            <div class="grid-3" style="margin-top:1.5rem;">
+                <div class="stat-card" style="padding:1.2rem;">
+                    <h3 style="margin-bottom:0.3rem;">Track</h3>
+                    <p style="font-size:1.1rem; color:#f0f6fc; font-family:'Playfair Display',serif;">Education · EdTech</p>
+                </div>
+                <div class="stat-card" style="padding:1.2rem;">
+                    <h3 style="margin-bottom:0.3rem;">Status</h3>
+                    <p style="font-size:1.1rem; color:#f0f6fc; font-family:'Playfair Display',serif;">Live product</p>
+                </div>
+                <div class="stat-card" style="padding:1.2rem;">
+                    <h3 style="margin-bottom:0.3rem;">Constraint</h3>
+                    <p style="font-size:1.1rem; color:#f0f6fc; font-family:'Playfair Display',serif;">Low-spec first</p>
+                </div>
+            </div>
+            <div class="footer-line">
+                <span>edustdhub.vercel.app</span>
+                <span style="color:#2dd4bf;">→</span>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 2 ===== -->
+        <div class="slide" data-index="1">
+            <div class="slide-number">02 / 10</div>
+            <div class="badge-row">
+                <span class="chip purple">Context</span>
+                <span class="chip">The problem</span>
+            </div>
+            <h2>The daily stack is broken.</h2>
+            <p class="subhead" style="margin-bottom:1rem;">Bangladesh classrooms and hostels are the design constraint — not an afterthought.</p>
+            <div class="grid-2">
+                <div class="stat-card">
+                    <div class="stat-number">8–10</div>
+                    <div class="stat-label">apps per student, per day</div>
+                    <div class="stat-desc">ChatGPT, Drive, Notion, a timer, a tracker, notes. Every hop kills a pomodoro.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2G/3G</div>
+                    <div class="stat-label">hostel networks</div>
+                    <div class="stat-desc">Heavy web apps lock out low-cost Android phones and weak connections. That is the actual classroom.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Privacy</div>
+                    <div class="stat-label">scatter</div>
+                    <div class="stat-desc">Study chats, files, and habits live on someone else's servers — often unencrypted in practice.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Paper</div>
+                    <div class="stat-label">and fatigue</div>
+                    <div class="stat-desc">Printouts fill the gaps. Students burn out from tooling, not from learning.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 3 ===== -->
+        <div class="slide" data-index="2">
+            <div class="slide-number">03 / 10</div>
+            <div class="badge-row">
+                <span class="chip">The product</span>
+            </div>
+            <h2>StudyHub is the study operating system.</h2>
+            <p class="subhead">A single low-power workspace that combines focus tools, knowledge, and an AI copilot — so students think more and switch less.</p>
+            <div class="grid-4" style="margin-top:1.5rem;">
+                <div class="stat-card">
+                    <div style="font-size:1.8rem; font-weight:600; color:#2dd4bf; font-family:'Playfair Display',serif;">1</div>
+                    <h3 style="margin-top:0.3rem; font-size:0.85rem;">Focus core</h3>
+                    <p style="font-size:0.8rem; color:#8b949e; margin-top:0.3rem;">Pomodoro, deep work, Eisenhower, streak. Protect the hour before adding AI.</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size:1.8rem; font-weight:600; color:#2dd4bf; font-family:'Playfair Display',serif;">2</div>
+                    <h3 style="margin-top:0.3rem; font-size:0.85rem;">Knowledge plane</h3>
+                    <p style="font-size:0.8rem; color:#8b949e; margin-top:0.3rem;">Notes, files, and search history in one place — not five drives.</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size:1.8rem; font-weight:600; color:#2dd4bf; font-family:'Playfair Display',serif;">3</div>
+                    <h3 style="margin-top:0.3rem; font-size:0.85rem;">Honest AI</h3>
+                    <p style="font-size:0.8rem; color:#8b949e; margin-top:0.3rem;">Cited answers and cross-tab synthesis. Optional. Student stays in control.</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size:1.8rem; font-weight:600; color:#2dd4bf; font-family:'Playfair Display',serif;">4</div>
+                    <h3 style="margin-top:0.3rem; font-size:0.85rem;">Privacy wall</h3>
+                    <p style="font-size:0.8rem; color:#8b949e; margin-top:0.3rem;">No unencrypted PII. Local-first artifacts. COPPA / GDPR posture.</p>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top:0.75rem;">
+                <p><strong>Low-spec first:</strong> Cheap phones, small payloads, offline-capable. No 16 GB RAM required.</p>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 4 ===== -->
+        <div class="slide" data-index="3">
+            <div class="slide-number">04 / 10</div>
+            <div class="badge-row">
+                <span class="chip">Shipped — live today</span>
+            </div>
+            <h2>What you can open in the next minute.</h2>
+            <div class="grid-2" style="margin-top:1.5rem;">
+                <div class="stat-card">
+                    <h3>Command dashboard</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Today's stats, streak, history at a glance.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Deep work clock</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Unbounded focus time with today's minutes and lifetime total.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Quick search</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Ask inside the workspace. Every search is logged locally.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Priority matrix</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Eisenhower quadrants so urgency stops pretending to be importance.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Task timer</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Classic 25-minute pomodoro. Start, stop, reset. Sessions counted.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Daily reflection</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Close the day in the same place you studied — not a fifth app.</p>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top:1rem;">
+                <p><strong>AI copilot layer:</strong> Cited search and cross-tab synthesis sit on this core as a module — not a chatbot island. Optional. User-initiated. Works with AI off.</p>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 5 ===== -->
+        <div class="slide" data-index="4">
+            <div class="slide-number">05 / 10</div>
+            <div class="badge-row">
+                <span class="chip purple">AI philosophy</span>
+            </div>
+            <h2>AI is a copilot. The student is the pilot.</h2>
+            <div class="grid-2" style="margin-top:1.5rem;">
+                <div class="stat-card" style="border-color:rgba(45,212,191,0.3);">
+                    <h3 style="color:#2dd4bf;">Where AI is used</h3>
+                    <ul style="margin-top:0.75rem;">
+                        <li>Natural-language study search with cited sources — not anonymous paragraphs.</li>
+                        <li>Cross-tab synthesis: summarize, compare, and build tables from what is already open.</li>
+                        <li>Always user-initiated. The copilot does not run in the background on private notes.</li>
+                    </ul>
+                </div>
+                <div class="stat-card" style="border-color:rgba(248,113,113,0.3);">
+                    <h3 style="color:#f87171;">Where AI is not used</h3>
+                    <ul style="margin-top:0.75rem;">
+                        <li>Timers, Eisenhower matrix, streaks, and local notes work with the model off.</li>
+                        <li>No silent upload of student PII. No "do my homework" mode.</li>
+                        <li>Core product remains useful on a dead network — that is the point.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top:1rem;">
+                <p>This is how we reduce AI dependence, rather than increase it: <strong>one cited copilot instead of ten chat windows</strong>, and a study OS that still works when the model is down. Development use of AI is documented in the public repository. Architecture and product decisions are the team's.</p>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 6 ===== -->
+        <div class="slide" data-index="5">
+            <div class="slide-number">06 / 10</div>
+            <div class="badge-row">
+                <span class="chip">Scale path</span>
+                <span class="chip purple">One device → classroom → campus</span>
+            </div>
+            <h2>Modular. Local-first. Ready to export.</h2>
+            <div class="grid-3" style="margin-top:1.5rem;">
+                <div class="stat-card">
+                    <h3>01 · Experience</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Dashboard, timers, matrix, reflection — the student-facing OS.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>02 · Intelligence</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Optional AI copilot. Citations and synthesis. Can be disabled.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>03 · Knowledge</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Local-first store for notes, history, files. Sync is a later concern.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>04 · Privacy boundary</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">No unencrypted PII. COPPA / GDPR posture. Encryption at rest for anything personal.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>05 · Delivery</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Web + PWA. Small payloads. 2G-tolerant. No native SDK required to start.</p>
+                </div>
+                <div class="stat-card" style="border-color:rgba(45,212,191,0.4); background:rgba(45,212,191,0.04);">
+                    <h3 style="color:#2dd4bf;">→ Moodle-shaped</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Export path built for real classrooms. A college can trial this next semester.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 7 ===== -->
+        <div class="slide" data-index="6">
+            <div class="slide-number">07 / 10</div>
+            <div class="badge-row">
+                <span class="chip">Built for the brief</span>
+            </div>
+            <h2>Not around it.</h2>
+            <div class="grid-3" style="margin-top:1.5rem;">
+                <div class="stat-card">
+                    <h3>Privacy</h3>
+                    <div class="chip" style="margin-bottom:0.5rem;">Weight 20%</div>
+                    <ul style="margin-top:0.3rem;">
+                        <li>No unencrypted PII — ever</li>
+                        <li>Local-first study artifacts</li>
+                        <li>AI calls are explicit and user-initiated</li>
+                        <li>This build uses synthetic student data</li>
+                        <li>COPPA / GDPR-aligned data layers</li>
+                    </ul>
+                </div>
+                <div class="stat-card">
+                    <h3>Sustainability</h3>
+                    <div class="chip" style="margin-bottom:0.5rem;">Weight 25%</div>
+                    <ul style="margin-top:0.3rem;">
+                        <li>Paper-light: digital notes, not print packs</li>
+                        <li>One process instead of eight always-on apps</li>
+                        <li>No GPU. Minimal compute on cheap silicon</li>
+                        <li>Offline-capable — the radio can sleep</li>
+                        <li>Low-power delivery for low-cost phones</li>
+                    </ul>
+                </div>
+                <div class="stat-card">
+                    <h3>Feasibility</h3>
+                    <div class="chip" style="margin-bottom:0.5rem;">Weight 25%</div>
+                    <ul style="margin-top:0.3rem;">
+                        <li>Live on the web today — not slideware</li>
+                        <li>Cheap to host: static + a light API</li>
+                        <li>No special hardware to demo or deploy</li>
+                        <li>Open path to Moodle-shaped export</li>
+                        <li>A college can trial this next semester</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 8 ===== -->
+        <div class="slide" data-index="7">
+            <div class="slide-number">08 / 10</div>
+            <div class="badge-row">
+                <span class="chip purple">Differentiation</span>
+            </div>
+            <h2>Not another ChatGPT wrapper.</h2>
+            <p class="subhead" style="margin-bottom:1.5rem;">The novelty is the combination — and the constraint. We designed for 2G and low RAM first, then added AI, not the other way around.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>ChatGPT</th>
+                            <th>Notion</th>
+                            <th>Pomodoro</th>
+                            <th>StudyHub</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color:#2dd4bf; font-weight:500;">Cited AI answers</td>
+                            <td class="cross">No</td>
+                            <td class="cross">No</td>
+                            <td class="cross">No</td>
+                            <td class="check">Yes</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#2dd4bf; font-weight:500;">Focus tools</td>
+                            <td class="cross">No</td>
+                            <td class="mixed">Limited</td>
+                            <td class="check">Yes</td>
+                            <td class="check">Yes</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#2dd4bf; font-weight:500;">Local-first</td>
+                            <td class="cross">No</td>
+                            <td class="mixed">Mixed</td>
+                            <td class="check">Yes</td>
+                            <td class="check">Yes</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#2dd4bf; font-weight:500;">Low-spec / offline</td>
+                            <td class="cross">No</td>
+                            <td class="mixed">Mixed</td>
+                            <td class="check">Yes</td>
+                            <td class="check">Yes</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#2dd4bf; font-weight:500;">One student OS</td>
+                            <td class="cross">No</td>
+                            <td class="cross">No</td>
+                            <td class="cross">No</td>
+                            <td class="check">Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 9 ===== -->
+        <div class="slide" data-index="8">
+            <div class="slide-number">09 / 10</div>
+            <div class="badge-row">
+                <span class="chip">Scoring</span>
+            </div>
+            <h2>How we ask to be scored.</h2>
+            <p class="subhead">Every criterion has a surface in the product.</p>
+            <div class="grid-3" style="margin-top:1.5rem;">
+                <div class="stat-card">
+                    <h3>Technical complexity</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Modular local-first architecture, optional AI, Moodle-shaped scale path.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Capabilities & implementation</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Live product, cheap to operate, no special hardware, LMS export path.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Sustainability</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Paper-light, low power, one process, 2G-tolerant, cheap phones.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Innovation & availability</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">A student OS, not a wrapper. Constraint-first. Documented commits.</p>
+                </div>
+                <div class="stat-card">
+                    <h3>IV & IT & innovation</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">This deck, a 5-minute walkthrough, a live UI that already exists.</p>
+                </div>
+                <div class="stat-card" style="border-color:rgba(45,212,191,0.4);">
+                    <h3 style="color:#2dd4bf;">StudyHub</h3>
+                    <p style="color:#b1bac4; font-size:0.9rem;">Built. Live. Ready to walk through commit history.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 10 ===== -->
+        <div class="slide" data-index="9">
+            <div class="slide-number">10 / 10</div>
+            <div class="badge-row">
+                <span class="chip">Thank you</span>
+            </div>
+            <h1 style="font-size:2.6rem;">Built. Live. Ready.</h1>
+            <p class="subhead" style="margin-top:0.75rem;">Five minutes for the walkthrough. Questions welcome.</p>
+            <div style="margin: 1.5rem 0;">
+                <p style="font-size:1.6rem; font-family:'Playfair Display',serif; color:#2dd4bf; letter-spacing:0.5px;">edustdhub.vercel.app</p>
+            </div>
+            <div class="divider"></div>
+            <div style="margin-top:1rem;">
+                <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:2px; color:#8b949e; margin-bottom:0.5rem;">Team</p>
+                <div class="team-names">
+                    <span>Abrar Rahman Nafiu</span>
+                    <span>·</span>
+                    <span>Sayed Anindya Mahfuj</span>
+                    <span>·</span>
+                    <span>Imtanan Jaysan Arhab</span>
+                </div>
+            </div>
+            <div class="footer-line" style="margin-top:1.5rem;">
+                <span>StudyHub · EduStdHub Group · Nex Group</span>
+                <span style="color:#2dd4bf;">✦</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- keyboard hint -->
+    <div class="keyboard-hint" id="keyboardHint">
+        <kbd>←</kbd> <span class="dot">·</span> <kbd>→</kbd> <span style="margin-left:0.3rem;">or</span> <kbd>Space</kbd> <span style="margin-left:0.3rem;">to navigate</span>
+    </div>
+
+    <script>
+        (function() {
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+            let currentIndex = 0;
+            const hint = document.getElementById('keyboardHint');
+            let hintTimeout;
+
+            // Show the current slide
+            function showSlide(index) {
+                // clamp index
+                if (index < 0) index = 0;
+                if (index >= totalSlides) index = totalSlides - 1;
+
+                // remove active from all
+                slides.forEach((slide) => {
+                    slide.classList.remove('active');
+                });
+
+                // add active to target
+                slides[index].classList.add('active');
+                currentIndex = index;
+
+                // reset scroll position of the active slide
+                slides[index].scrollTop = 0;
+
+                // Show keyboard hint briefly on slide change
+                hint.classList.remove('fade');
+                clearTimeout(hintTimeout);
+                hintTimeout = setTimeout(() => {
+                    hint.classList.add('fade');
+                }, 2000);
+            }
+
+            // Next slide
+            function nextSlide() {
+                if (currentIndex < totalSlides - 1) {
+                    showSlide(currentIndex + 1);
+                }
+            }
+
+            // Previous slide
+            function prevSlide() {
+                if (currentIndex > 0) {
+                    showSlide(currentIndex - 1);
+                }
+            }
+
+            // Keyboard controls
+            document.addEventListener('keydown', (e) => {
+                // Left arrow or A
+                if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                    e.preventDefault();
+                    prevSlide();
+                }
+                // Right arrow or D or Space
+                if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D' || e.key === ' ') {
+                    e.preventDefault();
+                    nextSlide();
+                }
+                // Home / End keys for quick jump
+                if (e.key === 'Home') {
+                    e.preventDefault();
+                    showSlide(0);
+                }
+                if (e.key === 'End') {
+                    e.preventDefault();
+                    showSlide(totalSlides - 1);
+                }
+            });
+
+            // Touch/swipe support for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        // swipe left -> next
+                        nextSlide();
+                    } else {
+                        // swipe right -> prev
+                        prevSlide();
+                    }
+                }
+            }
+
+            // Initialize: show first slide
+            showSlide(0);
+
+            // Fade hint after 3 seconds
+            setTimeout(() => {
+                hint.classList.add('fade');
+            }, 3000);
+
+            // Hover on hint to bring back
+            hint.addEventListener('mouseenter', () => {
+                hint.classList.remove('fade');
+            });
+            hint.addEventListener('mouseleave', () => {
+                clearTimeout(hintTimeout);
+                hintTimeout = setTimeout(() => {
+                    hint.classList.add('fade');
+                }, 1500);
+            });
+        })();
+    </script>
+
+</body>
+</html>
